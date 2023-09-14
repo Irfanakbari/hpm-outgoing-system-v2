@@ -1,7 +1,8 @@
 import History from "@/models/History";
 import checkCookieMiddleware from "@/pages/api/middleware";
 import {Op} from "sequelize";
-import Part from "@/models/Part";
+import connection from "@/config/database";
+import Order from "@/models/Order";
 
 async function handler(req, res) {
     switch (req.method) {
@@ -72,7 +73,6 @@ async function handler(req, res) {
                     currentPage: page,
                 });
             } catch (e) {
-                console.log(e.message);
                 res.status(500).json({
                     ok: false,
                     data: "Internal Server Error",
@@ -81,17 +81,41 @@ async function handler(req, res) {
             break;
         case 'POST':
             try {
-                const { id_part } = req.body;
-                await History.create(
-                    {
-                        id_part
-                    },
-                );
+                const { id_part, pcc } = req.body;
 
-                res.status(201).json({
-                    ok: true,
-                    data: "Sukses"
-                });
+                await connection.transaction(async (t) => {
+                    const isThere = await Order.findByPk(pcc);
+
+                    if (!isThere) {
+                        return  res.status(400).json({
+                            ok: false,
+                            data: "Kode PCC Tidak Ditemukan"
+                        });
+                    }
+
+                    const hist = await History.findAll({
+                        where: {
+                            barcode_pcc : pcc
+                        }
+                    })
+
+                    if (hist.length > 0) {
+                        return res.status(400).json({
+                            ok: false,
+                            data: "Kode PCC Ini Sudah Di Input"
+                        });
+                    }
+
+                    await History.create({
+                        id_part,
+                        barcode_pcc: pcc
+                    },{transaction: t})
+
+                    return res.status(201).json({
+                        ok: true,
+                        data: "Sukses"
+                    });
+                })
             } catch (e) {
                 res.status(500).json({
                     ok: false,

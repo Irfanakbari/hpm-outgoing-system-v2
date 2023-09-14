@@ -1,4 +1,4 @@
-import {BiEdit, BiPlusMedical, BiRefresh, BiSolidUpArrow} from "react-icons/bi";
+import {BiEdit, BiPlusMedical, BiRefresh} from "react-icons/bi";
 import {ImCross} from "react-icons/im";
 import {BsFillTrashFill} from "react-icons/bs";
 import axios from "axios";
@@ -79,7 +79,7 @@ export default function User() {
 
 
     return(
-        <div className={`h-full bg-white`}>
+        <div className={`bg-white h-full flex flex-col`}>
             {
                 closeModal ?
                     <DeleteModal data={selectedCell} setCloseModal={setCloseModal} action={deleteData} />
@@ -170,62 +170,53 @@ export default function User() {
                     </div>
                     : null
             }
-            <div className={`bg-[#2589ce] py-1.5 px-2 text-white flex flex-row justify-between`}>
-                <h2 className={`font-bold text-[14px]`}>Filter</h2>
-                <div className={`flex items-center`}>
-                    <BiSolidUpArrow  size={10}/>
+            <div className="w-full bg-[#00B8A7] py-0.5 px-1 text-white flex flex-row">
+               <div
+                    onClick={()=> setCloseAddModal(true)}
+                    className={`flex-row flex items-center gap-1 px-3 py-1 hover:bg-[#2589ce] hover:cursor-pointer`}>
+                    <BiPlusMedical size={12} />
+                    <p className={`text-white font-bold text-sm`}>Baru</p>
+                </div>
+                <div
+                    onClick={()=> setCloseEditModal(true)}
+                    className={`flex-row flex items-center gap-1 px-3 py-1 hover:bg-[#2589ce] hover:cursor-pointer`}>
+                    <BiEdit size={12} />
+                    <p className={`text-white font-bold text-sm`}>Ubah</p>
+                </div>
+                <div
+                    onClick={()=>setCloseModal(true)}
+                    className={`flex-row flex items-center gap-1 px-3 py-1 hover:bg-[#2589ce] hover:cursor-pointer`}>
+                    <BsFillTrashFill size={12} />
+                    <p className={`text-white font-bold text-sm`}>Hapus</p>
+                </div>
+                <div
+                    onClick={()=> fetchData()}
+                    className={`flex-row flex items-center gap-1 px-3 py-1 hover:bg-[#2589ce] hover:cursor-pointer`}>
+                    <BiRefresh size={12} />
+                    <p className={`text-white font-bold text-sm`}>Refresh</p>
                 </div>
             </div>
-            <div className={`w-full h-4 border border-gray-500`} />
-            <div className={`w-full p-2`}>
-                <div className={`w-full bg-[#3da0e3] py-0.5 px-1 text-white flex flex-row`}>
-                    <div
-                        onClick={()=> setCloseAddModal(true)}
-                        className={`flex-row flex items-center gap-1 px-3 py-1 hover:bg-[#2589ce] hover:cursor-pointer`}>
-                        <BiPlusMedical size={12} />
-                        <p className={`text-white font-bold text-sm`}>Baru</p>
-                    </div>
-                    <div
-                        onClick={()=> setCloseEditModal(true)}
-                        className={`flex-row flex items-center gap-1 px-3 py-1 hover:bg-[#2589ce] hover:cursor-pointer`}>
-                        <BiEdit size={12} />
-                        <p className={`text-white font-bold text-sm`}>Ubah</p>
-                    </div>
-                    <div
-                        onClick={()=>setCloseModal(true)}
-                        className={`flex-row flex items-center gap-1 px-3 py-1 hover:bg-[#2589ce] hover:cursor-pointer`}>
-                        <BsFillTrashFill size={12} />
-                        <p className={`text-white font-bold text-sm`}>Hapus</p>
-                    </div>
-                    <div
-                        onClick={()=> fetchData()}
-                        className={`flex-row flex items-center gap-1 px-3 py-1 hover:bg-[#2589ce] hover:cursor-pointer`}>
-                        <BiRefresh size={12} />
-                        <p className={`text-white font-bold text-sm`}>Refresh</p>
-                    </div>
-                </div>
-                <div className="flex overflow-x-auto">
-                    <table className="w-full">
-                        <thead>
-                        <tr>
-                            <th className="py-2 bg-gray-100 text-center w-20">#</th>
-                            <th className="py-2 bg-gray-100 text-left">User ID</th>
-                            <th className="py-2 bg-gray-100 text-left">Username</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {
-                            dataUser.map((e, index) =>(
-                                <tr key={e['id']}  className={`${selectedCell.id === e['id'] ? 'bg-[#85d3ff]': ''} text-sm font-semibold border-b border-gray-500`} onClick={()=>setSelectedCell(e)}>
-                                    <td className="text-center p-1.5">{index+1}</td>
-                                    <td>{e['id']}</td>
-                                    <td>{e['username']}</td>
-                                </tr>
-                            ))
-                        }
-                        </tbody>
-                    </table>
-                </div>
+            <div className="w-full bg-white p-2 flex-grow overflow-hidden">
+                <table className="w-full">
+                    <thead>
+                    <tr>
+                        <th className="py-2 bg-gray-100 text-center w-20">#</th>
+                        <th className="py-2 bg-gray-100 text-left">User ID</th>
+                        <th className="py-2 bg-gray-100 text-left">Username</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {
+                        dataUser.map((e, index) =>(
+                            <tr key={e['id']}  className={`${selectedCell.id === e['id'] ? 'bg-[#85d3ff]': ''} text-sm font-semibold border-b border-gray-500`} onClick={()=>setSelectedCell(e)}>
+                                <td className="text-center p-1.5">{index+1}</td>
+                                <td>{e['id']}</td>
+                                <td>{e['username']}</td>
+                            </tr>
+                        ))
+                    }
+                    </tbody>
+                </table>
             </div>
         </div>
     )

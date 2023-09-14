@@ -11,6 +11,9 @@ const History = connection.define('History', {
     id_part: {
         type: DataTypes.STRING
     },
+    barcode_pcc: {
+        type: DataTypes.STRING
+    }
 }, {
     tableName: 'history',
     createdAt: 'timestamp',

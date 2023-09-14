@@ -5,7 +5,6 @@ import axios from "axios";
 import dayjs from "dayjs";
 import ExcelJS from "exceljs"
 import {showErrorToast} from "@/utils/toast";
-import {filterState} from "@/context/states";
 import {Button, DatePicker, Space, Spin, Table} from "antd";
 import {CalendarOutlined} from "@ant-design/icons";
 
@@ -200,6 +199,13 @@ export default function LapRiwayat() {
             render: (_, __, index) => (dataHistory.currentPage - 1) * dataHistory.limit + index + 1
         },
         {
+            title: 'Kode PCC',
+            dataIndex: 'barcode_pcc',
+            onFilter: (value, record) =>
+                record['barcode_pcc'].toString().toLowerCase().includes(value.toLowerCase()),
+            sorter: (a, b) => a.barcode_pcc.localeCompare(b.barcode_pcc),
+        },
+        {
             title: 'Kode Part',
             dataIndex: 'id_part',
             onFilter: (value, record) =>
@@ -282,7 +288,7 @@ export default function LapRiwayat() {
             ),
             render: (_, record) => {
                 return record['timestamp']
-                    ? dayjs(record['timestamp']).locale('id').format('DD MMMM YYYY HH:mm')
+                    ? dayjs(record['timestamp']).locale('id_ID').format('DD MMMM YYYY HH:mm')
                     : '-'
             }
         },

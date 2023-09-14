@@ -1,27 +1,20 @@
-import {BiEdit, BiImport, BiPlusMedical, BiRefresh, BiSolidUpArrow} from "react-icons/bi";
-import {ImCross} from "react-icons/im";
-import {BsFillTrashFill} from "react-icons/bs";
+import {BiImport, BiRefresh} from "react-icons/bi";
 import React, {useEffect, useState} from "react";
-import DeleteModal from "@/components/Modal/DeleteModal";
 import {showErrorToast, showSuccessToast} from "@/utils/toast";
 import {dataState, modalState} from "@/context/states";
 import {useForm} from "react-hook-form";
-import AddModalLayout from "@/components/Page/Master/Part/AddModal";
 import ImportModalLayout from "@/components/Page/Master/Order/ImportModal";
 import axios from "axios";
-import ReactDataGrid from "@inovua/reactdatagrid-community";
 import '@inovua/reactdatagrid-community/index.css'
-import {Button, Space, Spin, Table} from "antd";
-import {CalendarOutlined} from "@ant-design/icons";
-import dayjs from "dayjs";
+import {Spin, Table} from "antd";
 
 
 export default function Order() {
     const {setOrder, listOrder} = dataState()
-    const {setModalAdd, modalAdd, modalDelete,setModalDelete, modalImport, setModalImport} = modalState()
+    const {setModalAdd, setModalDelete, modalImport, setModalImport} = modalState()
     const [loading, setLoading] = useState(true)
-    const [selectedCell, setSelectedCell] = useState('')
-
+    const [selected, setSelected] = useState([]);
+    const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
     const {
         register,
@@ -68,7 +61,7 @@ export default function Order() {
                 showErrorToast(e.response.data.error);
             })
             .finally(() => {
-                setModalAdd(false);
+                setModalImport(false);
                 reset();
             });
     };
@@ -85,7 +78,7 @@ export default function Order() {
         })
     }
 
-    const onChange = (pagination, filters, sorter, extra) => {
+    const onChange = (pagination) => {
         setLoading(true);
 
         const url = `/api/orders?page=${pagination.current}&limit=${pagination.pageSize}`;
@@ -100,6 +93,11 @@ export default function Order() {
                  setLoading(false);
              });
 
+    };
+
+    const handleRowSelection = (selectedRowKeys, selectedRows) => {
+        setSelected(selectedRows);
+        setSelectedRowKeys(selectedRowKeys);
     };
 
     const columns = [
@@ -186,7 +184,7 @@ export default function Order() {
         {
             title: 'Part Color',
             dataIndex: 'part_color',
-            width: 100,
+            width: 150,
             onFilter: (value, record) =>
                 record['part_color'].toString().toLowerCase().includes(value.toLowerCase()),
             sorter: (a, b) => a.part_color.localeCompare(b.part_color),
@@ -292,29 +290,29 @@ export default function Order() {
 
     return(
         <div className={`bg-white h-full flex flex-col`}>
-            {modalDelete && (<DeleteModal data={selectedCell} setCloseModal={setModalDelete} action={deleteData} />)}
-            {modalAdd && (<AddModalLayout onSubmit={handleSubmit(submitData)} reset={reset} register={register} />)}
+            {/*{modalDelete && (<DeleteModal data={selected} setCloseModal={setModalDelete} action={deleteData} />)}*/}
+            {/*{modalAdd && (<AddModalLayout onSubmit={handleSubmit(submitData)} reset={reset} register={register} />)}*/}
             {modalImport && (<ImportModalLayout onSubmit={handleSubmit(submitImport)} reset={reset} register={register} />)}
 
             <div className="w-full bg-[#00B8A7] py-0.5 px-1 text-white flex flex-row">
-                <div
-                    onClick={()=> setModalAdd(true)}
-                    className={`flex-row flex items-center gap-1 px-3 py-1 hover:bg-[#0092A1] hover:cursor-pointer`}>
-                    <BiPlusMedical size={12} />
-                    <p className={`text-white font-bold text-sm`}>Baru</p>
-                </div>
+                {/*<div*/}
+                {/*    onClick={()=> setModalAdd(true)}*/}
+                {/*    className={`flex-row flex items-center gap-1 px-3 py-1 hover:bg-[#0092A1] hover:cursor-pointer`}>*/}
+                {/*    <BiPlusMedical size={12} />*/}
+                {/*    <p className={`text-white font-bold text-sm`}>Baru</p>*/}
+                {/*</div>*/}
                 <div
                     onClick={()=> setModalImport(true)}
                     className={`flex-row flex items-center gap-1 px-3 py-1 hover:bg-[#0092A1] hover:cursor-pointer`}>
                     <BiImport size={12} />
                     <p className={`text-white font-bold text-sm`}>Impor Excel</p>
                 </div>
-                <div
-                    onClick={()=>setModalDelete(true)}
-                    className={`flex-row flex items-center gap-1 px-3 py-1 hover:bg-[#0092A1] hover:cursor-pointer`}>
-                    <BsFillTrashFill size={12} />
-                    <p className={`text-white font-bold text-sm`}>Hapus</p>
-                </div>
+                {/*<div*/}
+                {/*    onClick={()=>setModalDelete(true)}*/}
+                {/*    className={`flex-row flex items-center gap-1 px-3 py-1 hover:bg-[#0092A1] hover:cursor-pointer`}>*/}
+                {/*    <BsFillTrashFill size={12} />*/}
+                {/*    <p className={`text-white font-bold text-sm`}>Hapus</p>*/}
+                {/*</div>*/}
                 <div
                     onClick={()=> fetchData()}
                     className={`flex-row flex items-center gap-1 px-3 py-1 hover:bg-[#0092A1] hover:cursor-pointer`}>
@@ -327,6 +325,12 @@ export default function Order() {
                     loading={
                         loading && <Spin tip="Loading..." delay={1500}/>
                     }
+                    rowSelection={{
+                        // checkStrictly:true,
+                        selectedRowKeys,
+                        onChange: handleRowSelection,
+                        preserveSelectedRowKeys: true
+                    }}
                     bordered
                     scroll={{
                         y: "68vh",
@@ -335,7 +339,7 @@ export default function Order() {
                     style={{
                         width: "100%"
                     }}
-                    rowKey={'index'}
+                    rowKey={'kode'}
                     tableLayout={"fixed"}
                     columns={columns}
                     dataSource={listOrder.data}
@@ -343,11 +347,12 @@ export default function Order() {
                     size={'small'}
                     pagination={{
                         total: listOrder['totalData'],
-                        defaultPageSize: 30,
+                        defaultPageSize: 50,
                         hideOnSinglePage: true,
-                        pageSizeOptions: [30, 50, 100],
+                        pageSizeOptions: [50, 150, 300],
                         showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`
-                    }}/>
+                    }}
+                />
             </div>
         </div>
     )
