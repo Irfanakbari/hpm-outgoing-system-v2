@@ -33,35 +33,29 @@ async function handler(req, res) {
             data.forEach((rowData, index) => {
                 createdData.push({
                     kode: rowData['Barcode'],
-                    from: rowData['FROM'],
+                    part_no: rowData['Part No'],
+                    part_name: rowData['Part Name'],
+                    part_color: rowData['Part Color Code :'],
+                    qty: rowData['Qty'],
                     to1: rowData['TO 1'],
                     to2: rowData['TO 2'],
-                    supply: rowData['Supply Address'],
-                    next_supply: rowData['Next Supply Address'],
-                    ms_id: rowData['M/S ID'],
-                    inventory_category: rowData['Inventory Category'],
-                    part_name: rowData['Part Name'],
-                    part_color: rowData['Part Color Code'],
-                    ps_code: rowData['P/S Code'],
-                    order_class: rowData['Order Class'],
+                    date_local: rowData['Date Local'],
+                    time_local: rowData['Time Local'],
+                    date_export: rowData['Date Export'],
+                    time_export: rowData['Time Export'],
+                    weekly: rowData['Weekly'],
+                    type_part: rowData['Tipe Part'],
+                    kd_lot_no: rowData['KD Lot No'],
                     seq_no: rowData['Production SEQ No'],
-                    kd_lot1: rowData['KD Lot No 1'],
-                    kd_lot2: rowData['KD Lot No 2'],
-                    qty: rowData['Qty'],
                     date: rowData['Date :'],
                     time: rowData['Time :'],
-                    hns: rowData['HNS'],
-                    kd_lot_no: rowData['KD Lot No'],
-                    part_number: rowData['Part Number'],
-                    part_no: rowData['Part No'],
                 })
             });
-
             await Order.bulkCreate(createdData)
 
             return res.status(200).json({ message: "Data berhasil disimpan" });
         } catch (error) {
-            console.log(error.message);
+            console.log(error);
             return res.status(500).json({ error: "Gagal menyimpan data" });
         }
     });

@@ -104,12 +104,12 @@ export default function Order() {
         {
             title: '#',
             dataIndex: 'index',
-            width: 50,
+            width: 90,
             fixed: 'left',
             render: (_, __, index) => (listOrder.currentPage - 1) * listOrder.limit + index + 1
         },
         {
-            title: 'Kode',
+            title: 'Kode PCC',
             dataIndex: 'kode',
             fixed: 'left',
             width: 300,
@@ -118,12 +118,38 @@ export default function Order() {
             sorter: (a, b) => a.kode.localeCompare(b.kode),
         },
         {
-            title: 'From',
-            dataIndex: 'from',
+            title: 'Part No',
+            dataIndex: 'part_no',
+            fixed: 'left',
+            width: 200,
+            onFilter: (value, record) =>
+                record['part_no'].toString().toLowerCase().includes(value.toLowerCase()),
+            sorter: (a, b) => a.part_no.localeCompare(b.part_no),
+        },
+        {
+            title: 'Part Name',
+            dataIndex: 'part_name',
+            width: 300,
+            fixed: 'left',
+            onFilter: (value, record) =>
+                record['part_name'].toString().toLowerCase().includes(value.toLowerCase()),
+            sorter: (a, b) => a.part_name.localeCompare(b.part_name),
+        },
+        {
+            title: 'Part Color',
+            dataIndex: 'part_color',
+            width: 200,
+            onFilter: (value, record) =>
+                record['part_color'].toString().toLowerCase().includes(value.toLowerCase()),
+            sorter: (a, b) => a.part_color.localeCompare(b.part_color),
+        },
+        {
+            title: 'Qty',
+            dataIndex: 'qty',
             width: 100,
             onFilter: (value, record) =>
-                record['from'].toString().toLowerCase().includes(value.toLowerCase()),
-            sorter: (a, b) => a.from.localeCompare(b.from),
+                record['qty'].toString().toLowerCase().includes(value.toLowerCase()),
+            sorter: (a, b) => a.qty.localeCompare(b.qty),
         },
         {
             title: 'To 1',
@@ -133,6 +159,7 @@ export default function Order() {
                 record['to1'].toString().toLowerCase().includes(value.toLowerCase()),
             sorter: (a, b) => a.to1.localeCompare(b.to1),
         },
+
         {
             title: 'To 2',
             dataIndex: 'to2',
@@ -142,68 +169,60 @@ export default function Order() {
             sorter: (a, b) => a.to2.localeCompare(b.to2),
         },
         {
-            title: 'Supply',
-            dataIndex: 'supply',
+            title: 'Date Local',
+            dataIndex: 'date_local',
             width: 100,
             onFilter: (value, record) =>
-                record['supply'].toString().toLowerCase().includes(value.toLowerCase()),
-            sorter: (a, b) => a.supply.localeCompare(b.supply),
+                record['date_local'].toString().toLowerCase().includes(value.toLowerCase()),
+            sorter: (a, b) => a.date_local.localeCompare(b.date_local),
         },
         {
-            title: 'Next Supply',
-            dataIndex: 'next_supply',
+            title: 'Time Local',
+            dataIndex: 'time_local',
+            width: 100,
+            onFilter: (value, record) =>
+                record['time_local'].toString().toLowerCase().includes(value.toLowerCase()),
+            sorter: (a, b) => a.time_local.localeCompare(b.time_local),
+        },
+        {
+            title: 'Date Export',
+            dataIndex: 'date_export',
+            width: 100,
+            onFilter: (value, record) =>
+                record['date_export'].toString().toLowerCase().includes(value.toLowerCase()),
+            sorter: (a, b) => a.date_export.localeCompare(b.date_export),
+        },
+        {
+            title: 'Time Export',
+            dataIndex: 'time_export',
+            width: 100,
+            onFilter: (value, record) =>
+                record['time_export'].toString().toLowerCase().includes(value.toLowerCase()),
+            sorter: (a, b) => a.time_export.localeCompare(b.time_export),
+        },
+        {
+            title: 'Weekly',
+            dataIndex: 'weekly',
             width: 150,
             onFilter: (value, record) =>
-                record['next_supply'].toString().toLowerCase().includes(value.toLowerCase()),
-            sorter: (a, b) => a.next_supply.localeCompare(b.next_supply),
+                record['weekly'].toString().toLowerCase().includes(value.toLowerCase()),
+            sorter: (a, b) => a.weekly.localeCompare(b.weekly),
         },
         {
-            title: 'M/S ID',
-            dataIndex: 'ms_id',
-            width: 100,
+            title: 'Tipe Part',
+            dataIndex: 'type_part',
+            width: 150,
             onFilter: (value, record) =>
-                record['ms_id'].toString().toLowerCase().includes(value.toLowerCase()),
-            sorter: (a, b) => a.ms_id.localeCompare(b.ms_id),
+                record['type_part'].toString().toLowerCase().includes(value.toLowerCase()),
+            sorter: (a, b) => a.type_part.localeCompare(b.type_part),
         },
         {
-            title: 'Inventory Category',
-            dataIndex: 'inventory_category',
-            width: 200,
-            onFilter: (value, record) =>
-                record['inventory_category'].toString().toLowerCase().includes(value.toLowerCase()),
-            sorter: (a, b) => a.inventory_category.localeCompare(b.inventory_category),
-        },
-        {
-            title: 'Part Name',
-            dataIndex: 'part_name',
+            title: 'KD Lot No',
+            dataIndex: 'kd_lot_no',
             width: 300,
             onFilter: (value, record) =>
-                record['part_name'].toString().toLowerCase().includes(value.toLowerCase()),
-            sorter: (a, b) => a.part_name.localeCompare(b.part_name),
-        },
-        {
-            title: 'Part Color',
-            dataIndex: 'part_color',
-            width: 150,
-            onFilter: (value, record) =>
-                record['part_color'].toString().toLowerCase().includes(value.toLowerCase()),
-            sorter: (a, b) => a.part_color.localeCompare(b.part_color),
-        },
-        {
-            title: 'P/S Code',
-            dataIndex: 'ps_code',
-            width: 100,
-            onFilter: (value, record) =>
-                record['ps_code'].toString().toLowerCase().includes(value.toLowerCase()),
-            sorter: (a, b) => a.ps_code.localeCompare(b.ps_code),
-        },
-        {
-            title: 'Order Class',
-            dataIndex: 'order_class',
-            width: 150,
-            onFilter: (value, record) =>
-                record['order_class'].toString().toLowerCase().includes(value.toLowerCase()),
-            sorter: (a, b) => a.order_class.localeCompare(b.order_class),
+                record['kd_lot_no'].toString().toLowerCase().includes(value.toLowerCase()),
+            sorter: (a, b) => a.kd_lot_no.localeCompare(b.kd_lot_no),
         },
         {
             title: 'Production SEQ No',
@@ -212,30 +231,6 @@ export default function Order() {
             onFilter: (value, record) =>
                 record['seq_no'].toString().toLowerCase().includes(value.toLowerCase()),
             sorter: (a, b) => a.seq_no.localeCompare(b.seq_no),
-        },
-        {
-            title: 'KD Lot 1',
-            dataIndex: 'kd_lot1',
-            width: 100,
-            onFilter: (value, record) =>
-                record['kd_lot1'].toString().toLowerCase().includes(value.toLowerCase()),
-            sorter: (a, b) => a.kd_lot1.localeCompare(b.kd_lot1),
-        },
-        {
-            title: 'KD Lot 2',
-            dataIndex: 'kd_lot2',
-            width: 200,
-            onFilter: (value, record) =>
-                record['kd_lot2'].toString().toLowerCase().includes(value.toLowerCase()),
-            sorter: (a, b) => a.kd_lot2.localeCompare(b.kd_lot2),
-        },
-        {
-            title: 'Qty',
-            dataIndex: 'qty',
-            width: 50,
-            onFilter: (value, record) =>
-                record['qty'].toString().toLowerCase().includes(value.toLowerCase()),
-            sorter: (a, b) => a.qty.localeCompare(b.qty),
         },
         {
             title: 'Date',
@@ -252,38 +247,6 @@ export default function Order() {
             onFilter: (value, record) =>
                 record['time'].toString().toLowerCase().includes(value.toLowerCase()),
             sorter: (a, b) => a.time.localeCompare(b.time),
-        },
-        {
-            title: 'HNS',
-            dataIndex: 'hns',
-            width: 100,
-            onFilter: (value, record) =>
-                record['hns'].toString().toLowerCase().includes(value.toLowerCase()),
-            sorter: (a, b) => a.hns.localeCompare(b.hns),
-        },
-        {
-            title: 'KD Lot No',
-            dataIndex: 'kd_lot_no',
-            width: 300,
-            onFilter: (value, record) =>
-                record['kd_lot_no'].toString().toLowerCase().includes(value.toLowerCase()),
-            sorter: (a, b) => a.kd_lot_no.localeCompare(b.kd_lot_no),
-        },
-        {
-            title: 'Part Number',
-            width: 300,
-            dataIndex: 'part_number',
-            onFilter: (value, record) =>
-                record['part_number'].toString().toLowerCase().includes(value.toLowerCase()),
-            sorter: (a, b) => a.part_number.localeCompare(b.part_number),
-        },
-        {
-            title: 'Part No',
-            dataIndex: 'part_no',
-            width: 300,
-            onFilter: (value, record) =>
-                record['part_no'].toString().toLowerCase().includes(value.toLowerCase()),
-            sorter: (a, b) => a.part_no.localeCompare(b.part_no),
         },
     ];
 

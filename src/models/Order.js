@@ -7,32 +7,8 @@ const Order = connection.define('Order', {
         allowNull: false,
         primaryKey: true
     },
-    from: {
-        type: DataTypes.STRING(50),
-        allowNull: true
-    },
-    to1: {
-        type: DataTypes.STRING(50),
-        allowNull: true
-    },
-    to2: {
-        type: DataTypes.STRING(50),
-        allowNull: true
-    },
-    supply: {
-        type: DataTypes.STRING(100),
-        allowNull: true
-    },
-    next_supply: {
-        type: DataTypes.STRING(100),
-        allowNull: true
-    },
-    ms_id: {
-        type: DataTypes.STRING(100),
-        allowNull: true
-    },
-    inventory_category: {
-        type: DataTypes.STRING(100),
+    part_no: {
+        type: DataTypes.STRING(255),
         allowNull: true
     },
     part_name: {
@@ -43,11 +19,39 @@ const Order = connection.define('Order', {
         type: DataTypes.STRING(100),
         allowNull: true
     },
-    ps_code: {
+    qty: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
+    to1: {
+        type: DataTypes.STRING(50),
+        allowNull: true
+    },
+    to2: {
+        type: DataTypes.STRING(50),
+        allowNull: true
+    },
+    date_local: {
         type: DataTypes.STRING(100),
         allowNull: true
     },
-    order_class: {
+    time_local: {
+        type: DataTypes.STRING(100),
+        allowNull: true
+    },
+    date_export: {
+        type: DataTypes.STRING(100),
+        allowNull: true
+    },
+    time_export: {
+        type: DataTypes.STRING(100),
+        allowNull: true
+    },
+    weekly: {
+        type: DataTypes.STRING(100),
+        allowNull: true
+    },
+    type_part: {
         type: DataTypes.STRING(100),
         allowNull: true
     },
@@ -55,16 +59,8 @@ const Order = connection.define('Order', {
         type: DataTypes.STRING(255),
         allowNull: true
     },
-    kd_lot1: {
+    kd_lot_no: {
         type: DataTypes.STRING(255),
-        allowNull: true
-    },
-    kd_lot2: {
-        type: DataTypes.STRING(255),
-        allowNull: true
-    },
-    qty: {
-        type: DataTypes.INTEGER,
         allowNull: true
     },
     date: {
@@ -75,22 +71,6 @@ const Order = connection.define('Order', {
         type: DataTypes.TIME,
         allowNull: true
     },
-    hns: {
-        type: DataTypes.STRING(100),
-        allowNull: true
-    },
-    kd_lot_no: {
-        type: DataTypes.STRING(255),
-        allowNull: true
-    },
-    part_number: {
-        type: DataTypes.STRING(255),
-        allowNull: true
-    },
-    part_no: {
-        type: DataTypes.STRING(255),
-        allowNull: true
-    }
 }, {
     tableName: 'orders',
     timestamps: false,
