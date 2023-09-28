@@ -29,142 +29,6 @@ export default function LapRiwayat() {
     };
 
 
-    const saveExcel = async (e) => {
-        e.preventDefault();
-        const workbook = new ExcelJS.Workbook();
-        const sheet = workbook.addWorksheet("My Sheet");
-        sheet.properties.defaultRowHeight = 40;
-        sheet.getCell('A1:I1').fill = {
-            type: 'pattern',
-            pattern:'solid',
-            fgColor : {argb: '0366fc'}
-        }
-        sheet.getCell('B1').fill = {
-            type: 'pattern',
-            pattern:'solid',
-            fgColor : {argb: '0366fc'}
-        }
-        sheet.getCell('C1').fill = {
-            type: 'pattern',
-            pattern:'solid',
-            fgColor : {argb: '0366fc'}
-        }
-        sheet.getCell('D1').fill = {
-            type: 'pattern',
-            pattern:'solid',
-            fgColor : {argb: '0366fc'}
-        }
-        sheet.getCell('E1').fill = {
-            type: 'pattern',
-            pattern:'solid',
-            fgColor : {argb: '0366fc'}
-        }
-        sheet.getCell('F1').fill = {
-            type: 'pattern',
-            pattern:'solid',
-            fgColor : {argb: '0366fc'}
-        }
-        sheet.getCell('G1').fill = {
-            type: 'pattern',
-            pattern:'solid',
-            fgColor : {argb: '0366fc'}
-        }
-        sheet.getCell('H1').fill = {
-            type: 'pattern',
-            pattern:'solid',
-            fgColor : {argb: '0366fc'}
-        }
-        sheet.getCell('I1').fill = {
-            type: 'pattern',
-            pattern:'solid',
-            fgColor : {argb: '0366fc'}
-        }
-        sheet.getRow(1).font = {
-            name: "Comic Sans MS",
-            family: 4,
-            size: 16,
-            bold: true,
-            color: {argb: 'FFFFFF'}
-        }
-        sheet.columns = [
-            {
-                header: "No",
-                key: "no",
-                width: 10,
-            },
-            {
-                header: "Kode Pallet",
-                key: "id",
-                width: 32,
-            },
-            {
-                header: "Customer",
-                key: "customer",
-                width: 32,
-            },
-            {
-                header: "Vehicle",
-                key: "vehicle",
-                width: 32,
-            },
-            {
-                header: "Part",
-                key: "part",
-                width: 32,
-            },
-            {
-                header: "Keluar",
-                key: "keluar",
-                width: 32,
-            },
-            {
-                header: "Operator Out",
-                key: "user_out",
-                width: 32,
-            },
-            {
-                header: "Masuk",
-                key: "masuk",
-                width: 32,
-            },
-            {
-                header: "Operator In",
-                key: "user_in",
-                width: 32,
-            },
-        ];
-        dataHistory.data.map((item, index) => {
-            const keluarDate = item['keluar'] ? dayjs(item['keluar']) : null;
-            const masukDate = item['masuk'] ? dayjs(item['masuk']) : null;
-            const oneWeekAgo = dayjs().subtract(1, 'week');
-
-            const rowFill = {
-                type: 'pattern',
-                pattern: 'solid',
-                fgColor: {
-                    argb:
-                        masukDate === null && keluarDate.isBefore(oneWeekAgo) ? 'FF0000' : 'FFFFFFFF'
-                },
-            };
-
-            const row = sheet.addRow({
-                no: index + 1,
-                id: item.id_part,
-                masuk: item['timestamp'] ? dayjs(item['timestamp']).locale('id').format('DD MMMM YYYY HH:mm') : '-',
-            });
-            row.fill = rowFill
-        });
-        await workbook.xlsx.writeBuffer().then(data=>{
-            const blob = new Blob([data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheet.sheet'})
-            const url = window.URL.createObjectURL(blob)
-            const anchor = document.createElement('a');
-            anchor.href = url;
-            anchor.download = 'Lap. Riwayat.xlsx';
-            anchor.click();
-            window.URL.revokeObjectURL(anchor);
-        })
-    };
-
     const onChange = (pagination, filters, sorter, extra) => {
         setLoading(true)
         const keluarStart = (filters?.timestamp && filters?.timestamp[0][0]) || '';
@@ -300,6 +164,88 @@ export default function LapRiwayat() {
             sorter: (a, b) => a.status.localeCompare(b.status),
         },
     ];
+    const saveExcel = async (e) => {
+        e.preventDefault();
+        const workbook = new ExcelJS.Workbook();
+        const sheet = workbook.addWorksheet("My Sheet");
+        sheet.properties.defaultRowHeight = 25;
+        sheet.getCell('A1:I1').fill = {
+            type: 'pattern',
+            pattern:'solid',
+            fgColor : {argb: '0366fc'}
+        }
+        sheet.getCell('B1').fill = {
+            type: 'pattern',
+            pattern:'solid',
+            fgColor : {argb: '0366fc'}
+        }
+        sheet.getCell('C1').fill = {
+            type: 'pattern',
+            pattern:'solid',
+            fgColor : {argb: '0366fc'}
+        }
+        sheet.getCell('D1').fill = {
+            type: 'pattern',
+            pattern:'solid',
+            fgColor : {argb: '0366fc'}
+        }
+        sheet.getCell('E1').fill = {
+            type: 'pattern',
+            pattern:'solid',
+            fgColor : {argb: '0366fc'}
+        }
+        sheet.getRow(1).font = {
+            family: 4,
+            size: 16,
+            bold: true,
+            color: {argb: 'FFFFFF'}
+        }
+        sheet.columns = [
+            {
+                header: "No",
+                key: "no",
+                width: 10,
+            },
+            {
+                header: "Kode PCC",
+                key: "barcode_pcc",
+                width: 32,
+            },
+            {
+                header: "Kode Part",
+                key: "id_part",
+                width: 32,
+            },
+            {
+                header: "Time Stamp",
+                key: "timestamp",
+                width: 32,
+            },
+            {
+                header: "Status",
+                key: "status",
+                width: 32,
+            },
+        ];
+        dataHistory.data.map((item, index) => {
+            sheet.addRow({
+                no: index + 1,
+                barcode_pcc: item.barcode_pcc,
+                id_part: item.id_part,
+                timestamp: item.timestamp ? dayjs(item.timestamp).locale('id').format('DD MMMM YYYY HH:mm') : '-',
+                status: item.status
+            });
+        });
+        await workbook.xlsx.writeBuffer().then(data=>{
+            const blob = new Blob([data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheet.sheet'})
+            const url = window.URL.createObjectURL(blob)
+            const anchor = document.createElement('a');
+            anchor.href = url;
+            anchor.download = 'Lap. Riwayat HPM.xlsx';
+            anchor.click();
+            window.URL.revokeObjectURL(anchor);
+        })
+    };
 
 
     return (
