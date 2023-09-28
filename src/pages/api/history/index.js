@@ -95,20 +95,22 @@ async function handler(req, res) {
 
                     const hist = await History.findAll({
                         where: {
-                            barcode_pcc : pcc
+                            barcode_pcc : pcc,
+                            status: 'BERHASIL'
                         }
                     })
 
                     if (hist.length > 0) {
-                        return res.status(400).json({
-                            ok: false,
-                            data: "Kode PCC Ini Sudah Di Input"
-                        });
+                            return res.status(400).json({
+                                ok: false,
+                                data: "Kode PCC Ini Sudah Di Input"
+                            });
                     }
 
                     await History.create({
                         id_part,
-                        barcode_pcc: pcc
+                        barcode_pcc: pcc,
+                        status: 'BERHASIL'
                     },{transaction: t})
 
                     return res.status(201).json({

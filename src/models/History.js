@@ -13,6 +13,14 @@ const History = connection.define('History', {
     },
     barcode_pcc: {
         type: DataTypes.STRING
+    }                       ,
+    timestamp: {
+        type: DataTypes.DATE   ,
+        default: new Date()
+    },
+    status: {
+        type: DataTypes.STRING,
+        default: 'GAGAL'
     }
 }, {
     tableName: 'history',

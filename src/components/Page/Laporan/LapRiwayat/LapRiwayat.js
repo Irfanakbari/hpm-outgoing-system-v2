@@ -288,9 +288,16 @@ export default function LapRiwayat() {
             ),
             render: (_, record) => {
                 return record['timestamp']
-                    ? dayjs(record['timestamp']).locale('id_ID').format('DD MMMM YYYY HH:mm')
+                    ? dayjs(record['timestamp']).format('DD MMMM YYYY HH:mm')
                     : '-'
             }
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            onFilter: (value, record) =>
+                record['status'].toString().toLowerCase().includes(value.toLowerCase()),
+            sorter: (a, b) => a.status.localeCompare(b.status),
         },
     ];
 
