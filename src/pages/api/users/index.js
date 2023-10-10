@@ -6,7 +6,11 @@ async function handler(req, res) {
     switch (req.method) {
         case 'GET':
             try {
-                const users = await User.findAll()
+                const users = await User.findAll({
+                    attributes:{
+                        exclude: ['password']
+                    }
+                })
                 res.status(200).json({
                     ok : true,
                     data : users
@@ -26,6 +30,7 @@ async function handler(req, res) {
                 await User.create({
                     username: newUser.username,
                     password: hash,
+                    role: newUser.role
                 } );
 
                 res.status(201).json({

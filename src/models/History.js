@@ -18,6 +18,10 @@ const History = connection.define('History', {
         type: DataTypes.DATE   ,
         default: new Date()
     },
+    operator: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
     status: {
         type: DataTypes.STRING,
         default: 'GAGAL'

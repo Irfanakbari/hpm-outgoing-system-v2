@@ -8,6 +8,7 @@ async function handler(req, res) {
         case 'POST':
             try {
                 const { id_part, pcc } = req.body;
+                const {username} = req.user
 
                 await connection.transaction(async (t) => {
                     const isThere = await Order.findByPk(pcc);
@@ -22,6 +23,7 @@ async function handler(req, res) {
                     await History.create({
                         id_part,
                         barcode_pcc: pcc,
+                        operator: username,
                         status: 'GAGAL'
                     },{transaction: t})
 

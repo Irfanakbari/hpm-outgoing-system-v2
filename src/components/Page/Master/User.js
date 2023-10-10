@@ -110,6 +110,13 @@ export default function User() {
                                             <label className="w-1/4">Password : </label>
                                             <input type={'password'} {...register("password")} className="border border-gray-300 p-1 flex-grow" />
                                         </div>
+                                        <div className="flex flex-row w-full justify-between items-center gap-2">
+                                            <label className="w-1/4">Role : </label>
+                                            <select {...register("role")} className="border border-gray-300 p-1 flex-grow" >
+                                                <option value={'ADMIN'}>ADMIN</option>
+                                                <option value={'OPERATOR'}>OPERATOR</option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div className="border border-gray-300 w-full p-3 flex flex-col gap-3 text-sm">
                                         <div className="flex flex-row justify-center gap-2">
@@ -203,15 +210,17 @@ export default function User() {
                         <th className="py-2 bg-gray-100 text-center w-20">#</th>
                         <th className="py-2 bg-gray-100 text-left">User ID</th>
                         <th className="py-2 bg-gray-100 text-left">Username</th>
+                        <th className="py-2 bg-gray-100 text-left">Role</th>
                     </tr>
                     </thead>
                     <tbody>
                     {
                         dataUser.map((e, index) =>(
-                            <tr key={e['id']}  className={`${selectedCell.id === e['id'] ? 'bg-[#85d3ff]': ''} text-sm font-semibold border-b border-gray-500`} onClick={()=>setSelectedCell(e)}>
+                            <tr key={e['uid']}  className={`${selectedCell.uid === e['uid'] ? 'bg-[#85d3ff]': ''} text-sm font-semibold border-b border-gray-500`} onClick={()=>setSelectedCell(e)}>
                                 <td className="text-center p-1.5">{index+1}</td>
-                                <td>{e['id']}</td>
+                                <td>{e['uid']}</td>
                                 <td>{e['username']}</td>
+                                <td>{e['role']?? '-'}</td>
                             </tr>
                         ))
                     }

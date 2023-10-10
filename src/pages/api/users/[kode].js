@@ -9,7 +9,7 @@ async function handler(req, res) {
                 const userId = req.query.kode; // Anggap req.body.id berisi ID pelanggan yang akan dihapus
                 await User.destroy({
                     where: {
-                        id: userId
+                        uid: userId
                     }
                 });
                 res.status(200).json({

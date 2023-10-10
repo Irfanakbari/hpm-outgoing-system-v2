@@ -157,6 +157,13 @@ export default function LapRiwayat() {
             }
         },
         {
+            title: 'Operator',
+            dataIndex: 'operator',
+            onFilter: (value, record) =>
+                record['operator'].toString().toLowerCase().includes(value.toLowerCase()),
+            sorter: (a, b) => a.operator.localeCompare(b.operator),
+        },
+        {
             title: 'Status',
             dataIndex: 'status',
             onFilter: (value, record) =>
@@ -222,6 +229,11 @@ export default function LapRiwayat() {
                 width: 32,
             },
             {
+                header: "Operator",
+                key: "operator",
+                width: 32,
+            },
+            {
                 header: "Status",
                 key: "status",
                 width: 32,
@@ -232,6 +244,7 @@ export default function LapRiwayat() {
                 no: index + 1,
                 barcode_pcc: item.barcode_pcc,
                 id_part: item.id_part,
+                operator: item.operator,
                 timestamp: item.timestamp ? dayjs(item.timestamp).locale('id').format('DD MMMM YYYY HH:mm') : '-',
                 status: item.status
             });
