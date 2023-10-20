@@ -57,11 +57,22 @@ async function handler(req, res) {
                     };
                 }
 
-                histories = await History.findAndCountAll({
-                    where: whereClause,
-                    limit: limit,
-                    offset: offset,
-                });
+                let queryOptions = {}
+                if (parseInt(req.query.page)){
+                    queryOptions = {
+                        ...queryOptions,
+                        where: whereClause,
+                        limit: limit,
+                        offset: offset,
+                    }
+                } else {
+                    queryOptions = {
+                        ...queryOptions,
+                        where: whereClause,
+                    }
+                }
+
+                histories = await History.findAndCountAll(queryOptions);
 
                 const totalData = histories.count;
 

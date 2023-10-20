@@ -171,6 +171,20 @@ export default function LapRiwayat() {
             sorter: (a, b) => a.status.localeCompare(b.status),
         },
     ];
+
+    const getData = async () => {
+        try {
+            const response = await axios.get(`/api/history`);
+            return response.data;
+        } catch (error) {
+            showErrorToast("Gagal Export Data");
+            throw error; // Mengembalikan error agar dapat ditangani di tempat lain jika perlu
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
     const saveExcel = async (e) => {
         e.preventDefault();
         const workbook = new ExcelJS.Workbook();
@@ -197,6 +211,11 @@ export default function LapRiwayat() {
             fgColor : {argb: '0366fc'}
         }
         sheet.getCell('E1').fill = {
+            type: 'pattern',
+            pattern:'solid',
+            fgColor : {argb: '0366fc'}
+        }
+        sheet.getCell('F1').fill = {
             type: 'pattern',
             pattern:'solid',
             fgColor : {argb: '0366fc'}
@@ -239,7 +258,8 @@ export default function LapRiwayat() {
                 width: 32,
             },
         ];
-        dataHistory.data.map((item, index) => {
+        const data = await getData()
+        data.data.map((item, index) => {
             sheet.addRow({
                 no: index + 1,
                 barcode_pcc: item.barcode_pcc,
@@ -284,7 +304,7 @@ export default function LapRiwayat() {
                     }
                     bordered
                     scroll={{
-                        y: "68vh",
+                        y: "65vh",
                         x: "100vw",
                     }}
                     style={{

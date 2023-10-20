@@ -296,7 +296,7 @@ export default function Order() {
                     }}
                     bordered
                     scroll={{
-                        y: "68vh",
+                        y: "65vh",
                         x: "100vw",
                     }}
                     style={{
