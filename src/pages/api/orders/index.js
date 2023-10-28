@@ -5,22 +5,22 @@ async function handler(req, res) {
     switch (req.method) {
         case 'GET':
             try {
-                // const page = parseInt(req.query.page) || 1; // Halaman saat ini (default: 1)
-                // const limit = parseInt(req.query.limit) || 50; // Batasan data per halaman (default: 10)
-                // // Menghitung offset berdasarkan halaman dan batasan data
-                // const offset = (page - 1) * limit;
+                const page = parseInt(req.query.page) || 1; // Halaman saat ini (default: 1)
+                const limit = parseInt(req.query.limit) || 50; // Batasan data per halaman (default: 10)
+                // Menghitung offset berdasarkan halaman dan batasan data
+                const offset = (page - 1) * limit;
 
-                const orders = await Order.findAll({
-                    // limit: limit,
-                    // offset: offset,
+                const orders = await Order.findAndCountAll({
+                    limit: limit,
+                    offset: offset,
                 });
-                // const totalData = orders.count;
+                const totalData = orders.count;
 
                 res.status(200).json({
                     ok: true,
-                    data:orders,
+                    data:orders.rows,
                     limit: 0,
-                    // totalData,
+                    totalData,
                     currentPage: 0,
                 });
             } catch (e) {

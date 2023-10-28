@@ -296,6 +296,7 @@ export default function Order() {
                     }}
                     bordered
                     scroll={{
+                        scrollToFirstRowOnChange: true,
                         y: "65vh",
                         x: "100vw",
                     }}
@@ -306,16 +307,16 @@ export default function Order() {
                     tableLayout={"fixed"}
                     columns={columns}
                     dataSource={listOrder.data}
-                    // onChange={onChange}
+                    onChange={onChange}
                     size={'small'}
-                    // pagination={{
-                    //     total: listOrder['totalData'],
-                    //     defaultPageSize: 50,
-                    //     hideOnSinglePage: true,
-                    //     pageSizeOptions: [50, 150, 300],
-                    //     showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`
-                    // }}
-                    pagination={false}
+                    pagination={{
+                        total: listOrder['totalData'],
+                        defaultPageSize: 50,
+                        hideOnSinglePage: true,
+                        pageSizeOptions: [100, 300, 500, 1000, 2000],
+                        showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`
+                    }}
+                    // pagination={false}
                 />
             </div>
         </div>
