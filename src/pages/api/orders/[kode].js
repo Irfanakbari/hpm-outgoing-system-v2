@@ -5,7 +5,7 @@ async function handler(req, res) {
     switch (req.method) {
         case 'GET':
             try {
-                const orderId = req.query.kode; // Anggap req.body.id berisi ID pelanggan yang akan dihapus
+                const orderId = req.query.kode; 
                 const orderDetail = await Order.findByPk(orderId, {
                     attributes: ['part_no','part_name']
                 });

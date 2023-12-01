@@ -9,17 +9,21 @@ async function handler(req, res) {
         case 'GET':
             const {  start, end, search} = req.query;
             try {
-                const page = parseInt(req.query.page) || 1; // Halaman saat ini (default: 1)
-                const limit = parseInt(req.query.limit) || 30; // Batasan data per halaman (default: 10)
+                let page = parseInt(req.query.page) || 1; // Halaman saat ini (default: 1)
+                let limit = parseInt(req.query.limit) || 30; // Batasan data per halaman (default: 10)
                 // Menghitung offset berdasarkan halaman dan batasan data
-                const offset = (page - 1) * limit;
+                let offset = (page - 1) * limit;
 
                 let histories;
                 let whereClause = {}; // Inisialisasi objek kosong untuk kondisi where
                 if (search) {
+                    page = 1;
+                    limit = 30;
+                    offset = 0;
                     whereClause = {
-                        'id_part': {
-                            [Op.substring]: search.toString()
+                        ...whereClause,
+                        'barcode_pcc': {
+                            [Op.contains]: search.toString()
                         }
                     }
                 }
@@ -72,7 +76,10 @@ async function handler(req, res) {
                     }
                 }
 
-                histories = await History.findAndCountAll(queryOptions);
+                histories = await History.findAndCountAll({
+                    ...queryOptions,
+                    order  :['createdAt', 'DESC']
+                });
 
                 const totalData = histories.count;
 

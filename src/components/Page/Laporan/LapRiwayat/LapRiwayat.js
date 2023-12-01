@@ -5,8 +5,8 @@ import axios from "axios";
 import dayjs from "dayjs";
 import ExcelJS from "exceljs"
 import {showErrorToast} from "@/utils/toast";
-import {Button, DatePicker, Space, Spin, Table} from "antd";
-import {CalendarOutlined} from "@ant-design/icons";
+import {Button, DatePicker, Input, Space, Spin, Table} from "antd";
+import {CalendarOutlined, SearchOutlined} from "@ant-design/icons";
 
 
 export default function LapRiwayat() {
@@ -31,6 +31,8 @@ export default function LapRiwayat() {
 
     const onChange = (pagination, filters, sorter, extra) => {
         setLoading(true)
+        const searchParam = (filters?.barcode_pcc && filters?.barcode_pcc[0]) || '';
+
         const keluarStart = (filters?.timestamp && filters?.timestamp[0][0]) || '';
         const keluarEnd = (filters?.timestamp && filters?.timestamp[0][1]) || '';
 
@@ -40,7 +42,7 @@ export default function LapRiwayat() {
         const formattedKeluarStart = parsedKeluarStart.isValid() ? parsedKeluarStart.format('YYYY-MM-DD') : '';
         const formattedKeluarEnd = parsedKeluarEnd.isValid() ? parsedKeluarEnd.format('YYYY-MM-DD') : '';
 
-        const url = `/api/history?start=${formattedKeluarStart}&end=${formattedKeluarEnd}&page=${pagination.current}&limit=${pagination.pageSize}`;
+        const url = `/api/history?search=${searchParam??''}start=${formattedKeluarStart}&end=${formattedKeluarEnd}&page=${pagination.current}&limit=${pagination.pageSize}`;
         axios.get(url)
                      .then(response => {
                          setDataHistory(response.data);
@@ -65,6 +67,58 @@ export default function LapRiwayat() {
         {
             title: 'Kode PCC',
             dataIndex: 'barcode_pcc',
+            filterDropdown: ({setSelectedKeys, selectedKeys, confirm, close}) => (
+                <div
+                    style={{
+                        padding: 8,
+                    }}
+                    onKeyDown={(e) => e.stopPropagation()}
+                >
+                    <Input
+                        placeholder={`Search Kode`}
+                        value={selectedKeys[0]}
+                        onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                        onPressEnter={() => confirm}
+                        style={{
+                            marginBottom: 8,
+                            display: 'block',
+                        }}
+                    />
+                    <Space>
+                        <Button
+                            type={'primary'}
+                            size="small"
+                            style={{
+                                width: 90,
+                            }}
+                            onClick={() => {
+                                confirm({
+                                    closeDropdown: false,
+                                });
+                            }}>
+                            Search
+                        </Button>
+                        <Button
+                            style={{
+                                width: 90,
+                            }}
+                            size="small"
+                            onClick={() => {
+                                close();
+                            }}
+                        >
+                            Close
+                        </Button>
+                    </Space>
+                </div>
+            ),
+            filterIcon: (filtered) => (
+                <SearchOutlined
+                    style={{
+                        color: filtered ? '#1890ff' : 'red',
+                    }}
+                />
+            ),
             onFilter: (value, record) =>
                 record['barcode_pcc'].toString().toLowerCase().includes(value.toLowerCase()),
             sorter: (a, b) => a.barcode_pcc.localeCompare(b.barcode_pcc),
