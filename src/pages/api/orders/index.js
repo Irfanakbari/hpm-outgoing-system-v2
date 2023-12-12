@@ -18,9 +18,7 @@ async function handler(req, res) {
                     offset = 0;
                     whereClause = {
                         ...whereClause,
-                        'kode': {
-                            [Op.contains]: search.toString()
-                        }
+                        'kode': search.toString()
                     }
                 }
 

@@ -22,9 +22,7 @@ async function handler(req, res) {
                     offset = 0;
                     whereClause = {
                         ...whereClause,
-                        'barcode_pcc': {
-                            [Op.contains]: search.toString()
-                        }
+                        'barcode_pcc':  search.toString()
                     }
                 }
                 if (start && end) {
