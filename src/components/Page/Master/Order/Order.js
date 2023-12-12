@@ -6,7 +6,8 @@ import {useForm} from "react-hook-form";
 import ImportModalLayout from "@/components/Page/Master/Order/ImportModal";
 import axios from "axios";
 import '@inovua/reactdatagrid-community/index.css'
-import {Spin, Table} from "antd";
+import {Button, Input, Space, Spin, Table} from "antd";
+import {SearchOutlined} from "@ant-design/icons";
 
 
 export default function Order() {
@@ -78,10 +79,10 @@ export default function Order() {
         })
     }
 
-    const onChange = (pagination) => {
+    const onChange = (pagination,filters, sorter, extra) => {
         setLoading(true);
-
-        const url = `/api/orders?page=${pagination.current}&limit=${pagination.pageSize}`;
+        const searchParam = (filters?.kode && filters?.kode[0]) || '';
+        const url = `/api/orders?search=${searchParam??''}&page=${pagination.current}&limit=${pagination.pageSize}`;
         axios.get(url)
              .then(response => {
                  setOrder(response.data);
@@ -113,6 +114,58 @@ export default function Order() {
             dataIndex: 'kode',
             fixed: 'left',
             width: 300,
+            filterDropdown: ({setSelectedKeys, selectedKeys, confirm, close}) => (
+                <div
+                    style={{
+                        padding: 8,
+                    }}
+                    onKeyDown={(e) => e.stopPropagation()}
+                >
+                    <Input
+                        placeholder={`Search Kode`}
+                        value={selectedKeys[0]}
+                        onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                        onPressEnter={() => confirm}
+                        style={{
+                            marginBottom: 8,
+                            display: 'block',
+                        }}
+                    />
+                    <Space>
+                        <Button
+                            type={'primary'}
+                            size="small"
+                            style={{
+                                width: 90,
+                            }}
+                            onClick={() => {
+                                confirm({
+                                    closeDropdown: false,
+                                });
+                            }}>
+                            Search
+                        </Button>
+                        <Button
+                            style={{
+                                width: 90,
+                            }}
+                            size="small"
+                            onClick={() => {
+                                close();
+                            }}
+                        >
+                            Close
+                        </Button>
+                    </Space>
+                </div>
+            ),
+            filterIcon: (filtered) => (
+                <SearchOutlined
+                    style={{
+                        color: filtered ? '#1890ff' : 'red',
+                    }}
+                />
+            ),
             onFilter: (value, record) =>
                 record['kode'].toString().toLowerCase().includes(value.toLowerCase()),
             sorter: (a, b) => a.kode.localeCompare(b.kode),

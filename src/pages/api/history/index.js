@@ -78,7 +78,7 @@ async function handler(req, res) {
 
                 histories = await History.findAndCountAll({
                     ...queryOptions,
-                    order  :['createdAt', 'DESC']
+                    order :['createdAt', 'DESC']
                 });
 
                 const totalData = histories.count;

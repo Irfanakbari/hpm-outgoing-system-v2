@@ -42,7 +42,7 @@ export default function LapRiwayat() {
         const formattedKeluarStart = parsedKeluarStart.isValid() ? parsedKeluarStart.format('YYYY-MM-DD') : '';
         const formattedKeluarEnd = parsedKeluarEnd.isValid() ? parsedKeluarEnd.format('YYYY-MM-DD') : '';
 
-        const url = `/api/history?search=${searchParam??''}start=${formattedKeluarStart}&end=${formattedKeluarEnd}&page=${pagination.current}&limit=${pagination.pageSize}`;
+        const url = `/api/history?search=${searchParam??''}&start=${formattedKeluarStart}&end=${formattedKeluarEnd}&page=${pagination.current}&limit=${pagination.pageSize}`;
         axios.get(url)
                      .then(response => {
                          setDataHistory(response.data);

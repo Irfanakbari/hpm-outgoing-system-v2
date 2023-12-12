@@ -1,16 +1,31 @@
 import checkCookieMiddleware from "@/pages/api/middleware";
 import Order from "@/models/Order";
+import {Op} from "sequelize";
 
 async function handler(req, res) {
     switch (req.method) {
         case 'GET':
             try {
-                const page = parseInt(req.query.page) || 1; // Halaman saat ini (default: 1)
-                const limit = parseInt(req.query.limit) || 50; // Batasan data per halaman (default: 10)
+                const {search} = req.query;
+                let page = parseInt(req.query.page) || 1; // Halaman saat ini (default: 1)
+                let limit = parseInt(req.query.limit) || 50; // Batasan data per halaman (default: 10)
                 // Menghitung offset berdasarkan halaman dan batasan data
-                const offset = (page - 1) * limit;
+                let offset = (page - 1) * limit;
+                let whereClause = {}; // Inisialisasi objek kosong untuk kondisi where
+                if (search) {
+                    page = 1;
+                    limit = 30;
+                    offset = 0;
+                    whereClause = {
+                        ...whereClause,
+                        'kode': {
+                            [Op.contains]: search.toString()
+                        }
+                    }
+                }
 
                 const orders = await Order.findAndCountAll({
+                    where: whereClause,
                     limit: limit,
                     offset: offset,
                 });
