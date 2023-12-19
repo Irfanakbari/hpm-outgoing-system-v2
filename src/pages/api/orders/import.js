@@ -25,10 +25,10 @@ async function handler(req, res) {
 
             const createdData = [];
 
-            await Order.destroy({
-                where: {},
-                truncate: false
-            });
+            // await Order.destroy({
+            //     where: {},
+            //     truncate: false
+            // });
 
             data.forEach((rowData, index) => {
                 createdData.push({
