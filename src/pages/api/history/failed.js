@@ -21,7 +21,7 @@ async function handler(req, res) {
                     }
 
                     await History.create({
-                        id_part,
+                        id_part: isThere.part_no,
                         barcode_pcc: pcc,
                         operator: username,
                         status: 'GAGAL'
